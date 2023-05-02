@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid'
+import propTypes from 'prop-types';
+import css from '../ContactsForm/ContactsForm.module.css'
 
 export class ContactsForm extends Component {
   state = {
@@ -9,9 +11,11 @@ export class ContactsForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    console.log('submit')
-    this.props.addContact({id: nanoid(6), ...this.state});
-    this.reset()
+    // console.log('submit')
+    const isContactExists = this.props.addContact({id: nanoid(6), ...this.state});
+    if(!isContactExists) {
+      this.reset()
+    }
   };
 
   handleChange = (e) => {
@@ -29,10 +33,10 @@ export class ContactsForm extends Component {
 
   render() {
     return (
-      <form onSubmit = {this.handleSubmit}>
-        <label>
+      <form className={css.form} onSubmit = {this.handleSubmit}>
+        <label className={css.label}>
         Name
-        <input
+        <input className={css.input}
         onChange={this.handleChange}
           type="text"
           name="name"
@@ -42,9 +46,9 @@ export class ContactsForm extends Component {
           value={this.state.name}
         />
         </label>
-       <label>
+       <label className={css.label}>
         Number
-       <input
+       <input className={css.input}
        onChange={this.handleChange}
           type="tel"
           name="number"
@@ -54,8 +58,13 @@ export class ContactsForm extends Component {
           value={this.state.number}
         />
        </label>
-       <button type='submit'>Add Contact</button>
+       <button className={css.addBtn} type='submit'>Add Contact</button>
       </form>
     );
   }
 }
+
+ContactsForm.propTypes = {
+  name: propTypes.string,
+  number: propTypes.string,
+};
